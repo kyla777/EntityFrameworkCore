@@ -152,6 +152,14 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
             // Assert
             Assert.Equal(expectedName, actual.Name);
             Assert.Equal(expectedDescription, actual.Description);
+
+            // Cleanup
+            //var list = context.Suppliers.ToList();
+            //foreach (var item in list)
+            //{
+            //    sut.Delete(item.ID);
+            //}
+            sut.Delete(supplier.ID);
         }
     }
 }
