@@ -15,12 +15,20 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
             // Arrange
             var context = new ECommerceDbContext();
             var sut = new ProductRepository(context);
+            var categoryRepo = new CategoryRepository(context);
+            Category category = new Category
+            {
+                Name = "Shoes",
+                Description = "Shoes Department"
+            };
+            categoryRepo.Create(category);
+
             Product product = new Product
             {
                 Name = "Rubber Shoes",
                 Description = "This is a pair of rubber shoes.",
                 Price = 2000,
-                CategoryID = 139,
+                CategoryID = category.ID,
                 ImageUrl = "rubbershoes.jpg"
             };
 
@@ -33,6 +41,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
 
             // Cleanup
             sut.Delete(result.ID);
+            categoryRepo.Delete(category.ID);
         }
 
         [Fact]
@@ -41,12 +50,19 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
             // Arrange
             var context = new ECommerceDbContext();
             var sut = new ProductRepository(context);
+            var categoryRepo = new CategoryRepository(context);
+            Category category = new Category
+            {
+                Name = "Shoes",
+                Description = "Shoes Department"
+            };
+            categoryRepo.Create(category);
             Product product = new Product
             {
                 Name = "Rubber Shoes",
                 Description = "This is a pair of rubber shoes.",
                 Price = 2000,
-                CategoryID = 139,
+                CategoryID = category.ID,
                 ImageUrl = "rubbershoes.jpg"
             };
             sut.Create(product);
@@ -59,6 +75,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
 
             // Assert
             Assert.Null(actual);
+            categoryRepo.Delete(category.ID);
         }
 
         [Fact]
@@ -67,12 +84,20 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
             // Arrange
             var context = new ECommerceDbContext();
             var sut = new ProductRepository(context);
+            var categoryRepo = new CategoryRepository(context);
+            Category category = new Category
+            {
+                Name = "Shoes",
+                Description = "Shoes Department"
+            };
+            categoryRepo.Create(category);
+
             Product product = new Product
             {
                 Name = "Rubber Shoes",
                 Description = "This is a pair of rubber shoes.",
                 Price = 2000,
-                CategoryID = 139,
+                CategoryID = category.ID,
                 ImageUrl = "rubbershoes.jpg"
             };
             sut.Create(product);
@@ -85,6 +110,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
 
             // Cleanup
             sut.Delete(actual.ID);
+            categoryRepo.Delete(category.ID);
 
         }
 
@@ -108,14 +134,22 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
             // Arrange
             var context = new ECommerceDbContext();
             var sut = new ProductRepository(context);
-            for(var i=1; i<=10; i += 1)
+            var categoryRepo = new CategoryRepository(context);
+            Category category = new Category
+            {
+                Name = "Shoes",
+                Description = "Shoes Department"
+            };
+            categoryRepo.Create(category);
+
+            for (var i=1; i<=10; i += 1)
             {
                 sut.Create(new Product
                 {
                     Name = string.Format("Rubber Shoes {0}", i),
                     Description = string.Format("This is a pair of rubber shoes {0}.", i),
                     Price = 2000,
-                    CategoryID = 139,
+                    CategoryID = category.ID,
                     ImageUrl = string.Format("rubbershoes{0}.jpg", i)
                 });
             }
@@ -127,11 +161,12 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
             Assert.True(list.Count() == 5);
 
             // Cleanup
-            list = sut.Retrieve(0, Int32.MaxValue);
+            list = context.Products.ToList();
             foreach (var item in list)
             {
                 sut.Delete(item.ID);
             }
+            categoryRepo.Delete(category.ID);
         }
 
         [Fact]
@@ -140,12 +175,20 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
             // Arrange
             var context = new ECommerceDbContext();
             var sut = new ProductRepository(context);
+            var categoryRepo = new CategoryRepository(context);
+            Category category = new Category
+            {
+                Name = "Shoes",
+                Description = "Shoes Department"
+            };
+            categoryRepo.Create(category);
+
             Product product = new Product
             {
                 Name = "Rubber Shoes",
                 Description = "This is a pair of rubber shoes.",
                 Price = 2000,
-                CategoryID = 139,
+                CategoryID = category.ID,
                 ImageUrl = "rubbershoes.jpg"
             };
             sut.Create(product);
@@ -169,6 +212,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
 
             // Cleanup
             sut.Delete(actual.ID);
+            categoryRepo.Delete(category.ID);
         }
 
     }

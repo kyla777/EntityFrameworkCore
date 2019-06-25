@@ -95,7 +95,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
             Assert.True(list.Count() == 5);
 
             // Cleanup
-            list = sut.Retrieve(0, Int32.MaxValue);
+            list = context.Categories.ToList();
             foreach (var item in list)
             {
                 sut.Delete(item.ID);
