@@ -41,6 +41,8 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 };
                 context.Categories.Add(category);
 
+                context.SaveChanges();
+
                 // Product Object
                 var sut = new ProductRepository(context);
                 product = new Product
@@ -113,6 +115,8 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 };
 
                 context.Products.Add(product);
+
+                context.SaveChanges();
 
                 // Act
                 sut.Delete(product.ID);
@@ -328,6 +332,41 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 Assert.Equal(expectedName, actual.Name);
                 Assert.Equal(expectedDescription, actual.Description);
                 Assert.Equal(expectedImageUrl, actual.ImageUrl);
+            }
+        }
+
+        [Fact]
+        public void Create_WithNonExistingCategory_ShouldThrowAnException()
+        {
+            var connectionBuilder = new SqliteConnectionStringBuilder()
+            {
+                DataSource = ":memory:"
+            };
+            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
+
+            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
+                                .UseSqlite(connection)
+                                .Options;
+
+            Product product;
+
+            using (var context = new ECommerceDbContext(options))
+            {
+                context.Database.OpenConnection();
+                context.Database.EnsureCreated();
+
+                product = new Product
+                {
+                    Name = "Nike",
+                    Description = "Nike Product",
+                    CategoryID = -1,
+                    ImageUrl = "nike.jpg"
+                };
+
+                var sut = new ProductRepository(context);
+
+                // Act & Assert
+                Assert.Throws<SystemException>(() => sut.Create(product));
             }
         }
     }

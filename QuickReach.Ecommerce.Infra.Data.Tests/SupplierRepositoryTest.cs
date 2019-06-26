@@ -86,6 +86,8 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
 
                 context.Suppliers.Add(supplier);
 
+                context.SaveChanges();
+
                 var sut = new SupplierRepository(context);
 
                 // Act

@@ -85,6 +85,8 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
 
                 context.Categories.Add(category);
 
+                context.SaveChanges();
+
                 var sut = new CategoryRepository(context);
 
                 // Act
@@ -272,6 +274,53 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 Assert.NotNull(actual);
                 Assert.Equal(expectedName, actual.Name);
                 Assert.Equal(expectedDescription, actual.Description);
+            }
+        }
+
+        [Fact]
+        public void Delete_ValidEntityWithProduct_ShouldThrowAnException()
+        {
+            var connectionBuilder = new SqliteConnectionStringBuilder()
+            {
+                DataSource = ":memory:"
+            };
+            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
+
+            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
+                                .UseSqlite(connection)
+                                .Options;
+
+            Category category;
+            Product product;
+
+            using (var context = new ECommerceDbContext(options))
+            {
+                context.Database.OpenConnection();
+                context.Database.EnsureCreated();
+
+                category = new Category
+                {
+                    Name = "Shoes",
+                    Description = "Shoes Department"
+                };
+                context.Categories.Add(category);
+
+                product = new Product
+                {
+                    Name = "Nike",
+                    Description = "Nike Product",
+                    CategoryID = category.ID,
+                    ImageUrl = "nike.jpg"
+                };
+                context.Products.Add(product);
+
+                context.SaveChanges();
+
+                var sut = new CategoryRepository(context);
+
+                // Act & Assert
+                Assert.Throws<SystemException>(() => sut.Delete(category.ID));
+
             }
         }
     }
