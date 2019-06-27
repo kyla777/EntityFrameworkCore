@@ -21,7 +21,9 @@ namespace QuickReach.ECommerce.Infra.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new ProductEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductCategoryEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new CategoryRollUpEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new SupplierEntityTypeConfiguration());
 
             foreach (var relationship in modelBuilder.Model.GetEntityTypes()
@@ -35,14 +37,18 @@ namespace QuickReach.ECommerce.Infra.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //var connectionString = "Server=.;Database=QuickReachDb;Integrated Security=true;";
-            //optionsBuilder.UseSqlServer(connectionString);
+            if (!optionsBuilder.IsConfigured)
+            {
+                //var connectionString = "Server=.;Database=QuickReachDb;Integrated Security=true;";
+                //optionsBuilder.UseSqlServer(connectionString);
+            }
         }
 
 
         // Format => public DbSet<Entity> Entities { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
     }
 }
