@@ -14,34 +14,10 @@ namespace QuickReach.ECommerce.Infra.Data.Repositories
 
         }
 
-        public override void Delete(int entityId)
-        {
-            var products = this.context.Products
-                                    .Where(p => p.CategoryID == entityId)
-                                    .ToList();
-
-            if(products.Count() > 0)
-            {
-                throw new SystemException("Category contains products.");
-            }
-
-            //if(entity.Products.Count() != 0 || entity.Products.Count() != null)
-            //{
-            //    throw new SystemException("Category contains products.");
-            //}
-
-            var entity = this.context.Categories
-                                .Where(c => c.ID == entityId)
-                                .FirstOrDefault();
-
-            this.context.Remove(entity);
-            this.context.SaveChanges();
-        }
-
         public override Category Retrieve(int entityId)
         {
             var entity = this.context.Categories
-                                .AsNoTracking()
+                                // .AsNoTracking()
                                 .Include(c => c.Products)
                                 .Where(c => c.ID == entityId)
                                 .FirstOrDefault();

@@ -9,8 +9,8 @@ using QuickReach.ECommerce.Infra.Data;
 namespace QuickReach.ECommerce.Infra.Data.Migrations
 {
     [DbContext(typeof(ECommerceDbContext))]
-    [Migration("20190624063731_Add IsActive to Product")]
-    partial class AddIsActivetoProduct
+    [Migration("20190627024417_Initial Migration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -71,12 +71,33 @@ namespace QuickReach.ECommerce.Infra.Data.Migrations
                     b.ToTable("Product");
                 });
 
+            modelBuilder.Entity("QuickReach.ECommerce.Domain.Models.Supplier", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(255);
+
+                    b.Property<bool>("IsActive");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(40);
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Supplier");
+                });
+
             modelBuilder.Entity("QuickReach.ECommerce.Domain.Models.Product", b =>
                 {
                     b.HasOne("QuickReach.ECommerce.Domain.Models.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Restrict);
                 });
 #pragma warning restore 612, 618
         }

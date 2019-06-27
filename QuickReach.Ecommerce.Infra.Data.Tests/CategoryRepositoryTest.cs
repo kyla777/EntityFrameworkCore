@@ -319,7 +319,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 var sut = new CategoryRepository(context);
 
                 // Act & Assert
-                Assert.Throws<SystemException>(() => sut.Delete(category.ID));
+                Assert.Throws<InvalidOperationException>(() => sut.Delete(category.ID));
 
             }
         }
