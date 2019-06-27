@@ -15,6 +15,17 @@ namespace QuickReach.ECommerce.Infra.Data.Repositories
 
         }
 
+        public override void Delete(int entityId)
+        {
+            ProductCategory productCategory = this.context.ProductCategories
+                                                    .FirstOrDefault(pc => pc.ProductID == entityId);
+            this.context.ProductCategories.Remove(productCategory);
+            Product product = this.context.Products
+                                    .FirstOrDefault(p => p.ID == entityId);
+            this.context.Products.Remove(product);
+            this.context.SaveChanges();
+        }
+
         public IEnumerable<Product> Retrieve(string search = "", int skip = 0, int count = 10)
         {
             var results = this.context.Products

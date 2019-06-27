@@ -17,15 +17,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
         public void Create_WithValidEntity_ShouldCreateDatabaseRecord()
         {
             // Arrange
-            var connectionBuilder = new SqliteConnectionStringBuilder()
-            {
-                DataSource = ":memory:"
-            };
-            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
-
-            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                                .UseSqlite(connection)
-                                .Options;
+            var options = ConnectionOptionHelper.Sqlite();
 
             Category category;
 
@@ -34,11 +26,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 context.Database.OpenConnection();
                 context.Database.EnsureCreated();
 
-                category = new Category
-                {
-                    Name = "Shoes",
-                    Description = "Shoes Department"
-                };
+                category = SampleEntityHelper.SampleCategory();
 
                 var sut = new CategoryRepository(context);
 
@@ -235,32 +223,34 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
             }
         }
 
-        [Fact]
-        public void Delete_ValidEntityWithProduct_ShouldThrowAnException()
-        {
-            var options = ConnectionOptionHelper.Sqlite();
+        #region DeleteShouldThrowException
+        //[Fact]
+        //public void Delete_ValidEntityWithProduct_ShouldThrowAnException()
+        //{
+        //    var options = ConnectionOptionHelper.Sqlite();
 
-            Category category;
-            Product product;
+        //    Category category;
+        //    Product product;
 
-            using (var context = new ECommerceDbContext(options))
-            {
-                context.Database.OpenConnection();
-                context.Database.EnsureCreated();
+        //    using (var context = new ECommerceDbContext(options))
+        //    {
+        //        context.Database.OpenConnection();
+        //        context.Database.EnsureCreated();
 
-                category = SampleEntityHelper.SampleCategory();
-                context.Categories.Add(category);
+        //        category = SampleEntityHelper.SampleCategory();
+        //        context.Categories.Add(category);
 
-                product = SampleEntityHelper.SampleProduct(category.ID);
-                context.Products.Add(product);
+        //        product = SampleEntityHelper.SampleProduct(category.ID);
+        //        context.Products.Add(product);
 
-                context.SaveChanges();
+        //        context.SaveChanges();
 
-                var sut = new CategoryRepository(context);
+        //        var sut = new CategoryRepository(context);
 
-                // Act & Assert
-                Assert.Throws<DbUpdateException>(() => sut.Delete(category.ID));
-            }
-        }
+        //        // Act & Assert
+        //        Assert.Throws<DbUpdateException>(() => sut.Delete(category.ID));
+        //    }
+        //} 
+        #endregion
     }
 }

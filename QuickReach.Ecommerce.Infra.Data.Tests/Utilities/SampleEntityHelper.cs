@@ -12,20 +12,20 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests.Utilities
             Category category = new Category
             {
                 Name = "Shoes",
-                Description = "Shoes Department"
+                Description = "Shoes Department",
+                IsActive = true
             };
 
             return category;
         }
 
-        public static Product SampleProduct(int categoryID)
+        public static Product SampleProduct()
         {
             Product product = new Product
             {
                 Name = "Rubber Shoes",
                 Description = "This is a pair of rubber shoes.",
                 Price = 2000,
-                CategoryID = categoryID,
                 ImageUrl = "rubbershoes.jpg"
             };
 

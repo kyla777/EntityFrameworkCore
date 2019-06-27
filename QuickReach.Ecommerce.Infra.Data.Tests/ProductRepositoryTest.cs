@@ -7,6 +7,7 @@ using QuickReach.ECommerce.Infra.Data.Repositories;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using QuickReach.Ecommerce.Infra.Data.Tests.Utilities;
+using System.Collections.Generic;
 
 namespace QuickReach.Ecommerce.Infra.Data.Tests
 {
@@ -34,7 +35,20 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
 
                 // Product Object
                 var sut = new ProductRepository(context);
-                product = SampleEntityHelper.SampleProduct(category.ID);
+                product = SampleEntityHelper.SampleProduct();
+
+                ProductCategory productCategory = new ProductCategory()
+                {
+                    ProductID = product.ID,
+                    Product = product,
+                    CategoryID = category.ID,
+                    Category = category
+                };
+
+                List<ProductCategory> productCategories = new List<ProductCategory>();
+                productCategories.Add(productCategory);
+
+                product.ProductCategories = productCategories;
 
                 // Act
                 sut.Create(product);
@@ -49,13 +63,12 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 Assert.Equal(product.Name, actual.Name);
                 Assert.Equal(product.Description, actual.Description);
                 Assert.Equal(product.Price, actual.Price);
-                Assert.Equal(product.CategoryID, actual.CategoryID);
                 Assert.Equal(product.ImageUrl, actual.ImageUrl);
             }
         }
 
         [Fact]
-        public void Delete_WithValidEntityID_ShouldRemoveDatabaseRecord()
+        public void Delete_WithValidEntityID_ShouldThrowDbUpdateException()
         {
             // Arrange
             var options = ConnectionOptionHelper.Sqlite();
@@ -75,9 +88,22 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 context.Categories.Add(category);
 
                 // New product object
-                product = SampleEntityHelper.SampleProduct(category.ID);
+                product = SampleEntityHelper.SampleProduct();
 
                 context.Products.Add(product);
+
+                ProductCategory productCategory = new ProductCategory()
+                {
+                    ProductID = product.ID,
+                    Product = product,
+                    CategoryID = category.ID,
+                    Category = category
+                };
+
+                List<ProductCategory> productCategories = new List<ProductCategory>();
+                productCategories.Add(productCategory);
+
+                product.ProductCategories = productCategories;
 
                 context.SaveChanges();
 
@@ -112,7 +138,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 context.Categories.Add(category);
 
                 // Product object
-                product = SampleEntityHelper.SampleProduct(category.ID);
+                product = SampleEntityHelper.SampleProduct();
                 context.Products.Add(product);
                 context.SaveChanges();
             }
@@ -173,7 +199,6 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                         Name = string.Format("Rubber Shoes {0}", i),
                         Description = string.Format("This is a pair of rubber shoes {0}.", i),
                         Price = 2000,
-                        CategoryID = category.ID,
                         ImageUrl = string.Format("rubbershoes{0}.jpg", i)
                     });
                 }
@@ -213,7 +238,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 Category category = SampleEntityHelper.SampleCategory();
                 context.Categories.Add(category);
 
-                Product product = SampleEntityHelper.SampleProduct(category.ID);
+                Product product = SampleEntityHelper.SampleProduct();
                 context.Products.Add(product);
                 context.SaveChanges();
 
@@ -241,31 +266,32 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
             }
         }
 
-        [Fact]
-        public void Create_WithNonExistingCategory_ShouldThrowAnException()
-        {
-            var options = ConnectionOptionHelper.Sqlite();
+        #region CreateShouldThrowAnException
+        //[Fact]
+        //public void Create_WithNonExistingCategory_ShouldThrowAnException()
+        //{
+        //    var options = ConnectionOptionHelper.Sqlite();
 
-            Product product;
+        //    Product product;
 
-            using (var context = new ECommerceDbContext(options))
-            {
-                context.Database.OpenConnection();
-                context.Database.EnsureCreated();
+        //    using (var context = new ECommerceDbContext(options))
+        //    {
+        //        context.Database.OpenConnection();
+        //        context.Database.EnsureCreated();
 
-                product = new Product
-                {
-                    Name = "Nike",
-                    Description = "Nike Product",
-                    CategoryID = -1,
-                    ImageUrl = "nike.jpg"
-                };
+        //        product = new Product
+        //        {
+        //            Name = "Nike",
+        //            Description = "Nike Product",
+        //            ImageUrl = "nike.jpg"
+        //        };
 
-                var sut = new ProductRepository(context);
+        //        var sut = new ProductRepository(context);
 
-                // Act & Assert
-                Assert.Throws<DbUpdateException>(() => sut.Create(product));
-            }
-        }
+        //        // Act & Assert
+        //        Assert.Throws<DbUpdateException>(() => sut.Create(product));
+        //    }
+        //} 
+        #endregion
     }
 }
