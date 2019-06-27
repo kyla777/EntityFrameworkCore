@@ -7,6 +7,7 @@ using System.Linq;
 using System;
 using Xunit;
 using Microsoft.Data.Sqlite;
+using QuickReach.Ecommerce.Infra.Data.Tests.Utilities;
 
 namespace QuickReach.Ecommerce.Infra.Data.Tests
 {
@@ -60,15 +61,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
         public void Delete_WithValidEntityId_ShouldRemoveRecordInDatabase()
         {
             // Arrange
-            var connectionBuilder = new SqliteConnectionStringBuilder()
-            {
-                DataSource = ":memory:"
-            };
-            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
-
-            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                                .UseSqlite(connection)
-                                .Options;
+            var options = ConnectionOptionHelper.Sqlite();
 
             Category category;
 
@@ -77,11 +70,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 context.Database.OpenConnection();
                 context.Database.EnsureCreated();
 
-                category = new Category
-                {
-                    Name = "Shoes",
-                    Description = "Shoes Department"
-                };
+                category = SampleEntityHelper.SampleCategory();
 
                 context.Categories.Add(category);
 
@@ -106,15 +95,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
         public void Retrieve_WithValidEntityId_ReturnsAValidEntity()
         {
             // Arrange
-            var connectionBuilder = new SqliteConnectionStringBuilder()
-            {
-                DataSource = ":memory:"
-            };
-            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
-
-            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                                .UseSqlite(connection)
-                                .Options;
+            var options = ConnectionOptionHelper.Sqlite();
 
             Category category;
             var expectedName = "Shoes";
@@ -154,14 +135,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
         public void Retrieve_WithNonExistingEntityID_ReturnsNull()
         {
             // Arrange
-            var connectionBuilder = new SqliteConnectionStringBuilder()
-            {
-                DataSource = ":memory:"
-            };
-            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
-            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                                .UseSqlite(connection)
-                                .Options;
+            var options = ConnectionOptionHelper.Sqlite();
 
             using (var context = new ECommerceDbContext(options))
             {
@@ -182,15 +156,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
         public void Retrieve_WithSkipAndCount_ReturnsTheCorrectPage()
         {
             // Arrange
-            var connectionBuilder = new SqliteConnectionStringBuilder()
-            {
-                DataSource = ":memory:"
-            };
-            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
-
-            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                                .UseSqlite(connection)
-                                .Options;
+            var options = ConnectionOptionHelper.Sqlite();
 
             using (var context = new ECommerceDbContext(options))
             {
@@ -226,15 +192,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
         public void Update_WithValidEntity_ShouldUpdateDatabaseRecord()
         {
             // Arrange
-            var connectionBuilder = new SqliteConnectionStringBuilder()
-            {
-                DataSource = ":memory:"
-            };
-            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
-
-            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                                .UseSqlite(connection)
-                                .Options;
+            var options = ConnectionOptionHelper.Sqlite();
 
             var expectedName = "Shoes";
             var expectedDescription = "Shoes Department";
@@ -280,15 +238,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
         [Fact]
         public void Delete_ValidEntityWithProduct_ShouldThrowAnException()
         {
-            var connectionBuilder = new SqliteConnectionStringBuilder()
-            {
-                DataSource = ":memory:"
-            };
-            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
-
-            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                                .UseSqlite(connection)
-                                .Options;
+            var options = ConnectionOptionHelper.Sqlite();
 
             Category category;
             Product product;
@@ -298,20 +248,10 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 context.Database.OpenConnection();
                 context.Database.EnsureCreated();
 
-                category = new Category
-                {
-                    Name = "Shoes",
-                    Description = "Shoes Department"
-                };
+                category = SampleEntityHelper.SampleCategory();
                 context.Categories.Add(category);
 
-                product = new Product
-                {
-                    Name = "Nike",
-                    Description = "Nike Product",
-                    CategoryID = category.ID,
-                    ImageUrl = "nike.jpg"
-                };
+                product = SampleEntityHelper.SampleProduct(category.ID);
                 context.Products.Add(product);
 
                 context.SaveChanges();
@@ -320,7 +260,6 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
 
                 // Act & Assert
                 Assert.Throws<DbUpdateException>(() => sut.Delete(category.ID));
-
             }
         }
     }

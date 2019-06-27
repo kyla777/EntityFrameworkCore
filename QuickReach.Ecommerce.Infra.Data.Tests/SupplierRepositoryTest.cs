@@ -6,6 +6,7 @@ using QuickReach.ECommerce.Infra.Data;
 using QuickReach.ECommerce.Infra.Data.Repositories;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
+using QuickReach.Ecommerce.Infra.Data.Tests.Utilities;
 
 namespace QuickReach.Ecommerce.Infra.Data.Tests
 {
@@ -15,15 +16,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
         public void Create_WithValidEntity_ShouldCreateDatabaseRecord()
         {
             // Arrange
-            var connectionBuilder = new SqliteConnectionStringBuilder()
-            {
-                DataSource = ":memory:"
-            };
-            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
-
-            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                                .UseSqlite(connection)
-                                .Options;
+            var options = ConnectionOptionHelper.Sqlite();
 
             Supplier supplier;
 
@@ -32,12 +25,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 context.Database.OpenConnection();
                 context.Database.EnsureCreated();
 
-                supplier = new Supplier()
-                {
-                    Name = "Converse",
-                    Description = "Converse supplier",
-                    IsActive = true
-                };
+                supplier = SampleEntityHelper.SampleSupplier();
 
                 var sut = new SupplierRepository(context);
 
@@ -60,15 +48,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
         public void Delete_WithValidEntityID_ShouldRemoveDatabaseRecord()
         {
             // Arrange
-            var connectionBuilder = new SqliteConnectionStringBuilder()
-            {
-                DataSource = ":memory:"
-            };
-            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
-
-            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                                .UseSqlite(connection)
-                                .Options;
+            var options = ConnectionOptionHelper.Sqlite();
 
             Supplier supplier;
 
@@ -77,12 +57,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 context.Database.OpenConnection();
                 context.Database.EnsureCreated();
 
-                supplier = new Supplier()
-                {
-                    Name = "Converse",
-                    Description = "Converse supplier",
-                    IsActive = true
-                };
+                supplier = SampleEntityHelper.SampleSupplier();
 
                 context.Suppliers.Add(supplier);
 
@@ -107,15 +82,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
         public void Retrieve_WithValidEntityID_ShouldReturnAValidSupplier()
         {
             // Arrange
-            var connectionBuilder = new SqliteConnectionStringBuilder()
-            {
-                DataSource = ":memory:"
-            };
-            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
-
-            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                                .UseSqlite(connection)
-                                .Options;
+            var options = ConnectionOptionHelper.Sqlite();
 
             Supplier supplier;
             var expectedName = "Converse";
@@ -156,14 +123,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
         public void Retrieve_WithNonExistingEntityID_ShouldReturnNull()
         {
             // Arrange
-            var connectionBuilder = new SqliteConnectionStringBuilder()
-            {
-                DataSource = ":memory:"
-            };
-            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
-            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                                .UseSqlite(connection)
-                                .Options;
+            var options = ConnectionOptionHelper.Sqlite();
 
             using (var context = new ECommerceDbContext(options))
             {
@@ -184,15 +144,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
         public void Retrieve_WithSkipAndCount_ShouldReturnTheCorrectRecords()
         {
             // Arrange
-            var connectionBuilder = new SqliteConnectionStringBuilder()
-            {
-                DataSource = ":memory:"
-            };
-            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
-
-            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                                .UseSqlite(connection)
-                                .Options;
+            var options = ConnectionOptionHelper.Sqlite();
 
             using (var context = new ECommerceDbContext(options))
             {
@@ -229,15 +181,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
         public void Update_WithValidEntity_ShouldUpdateDatabaseRecord()
         {
             // Arrange
-            var connectionBuilder = new SqliteConnectionStringBuilder()
-            {
-                DataSource = ":memory:"
-            };
-            var connection = new SqliteConnection(connectionBuilder.ConnectionString);
-
-            var options = new DbContextOptionsBuilder<ECommerceDbContext>()
-                                .UseSqlite(connection)
-                                .Options;
+            var options = ConnectionOptionHelper.Sqlite();
 
             var expectedName = "Nike";
             var expectedDescription = "Nike supplier";
@@ -248,12 +192,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 context.Database.OpenConnection();
                 context.Database.EnsureCreated();
 
-                Supplier supplier = new Supplier()
-                {
-                    Name = "Converse",
-                    Description = "Converse supplier",
-                    IsActive = true
-                };
+                Supplier supplier = SampleEntityHelper.SampleSupplier();
 
                 context.Suppliers.Add(supplier);
                 context.SaveChanges();
