@@ -34,7 +34,6 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 context.SaveChanges();
 
                 // Product Object
-                var sut = new ProductRepository(context);
                 product = SampleEntityHelper.SampleProduct();
 
                 ProductCategory productCategory = new ProductCategory()
@@ -49,6 +48,8 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 productCategories.Add(productCategory);
 
                 product.ProductCategories = productCategories;
+
+                var sut = new ProductRepository(context);
 
                 // Act
                 sut.Create(product);
@@ -68,7 +69,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
         }
 
         [Fact]
-        public void Delete_WithValidEntityID_ShouldThrowDbUpdateException()
+        public void Delete_WithValidEntityID_ShouldRemoveDatabaseRecord()
         {
             // Arrange
             var options = ConnectionOptionHelper.Sqlite();
@@ -119,7 +120,7 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 Assert.Null(actual);
             }
         }
-
+        
         [Fact]
         public void Retrieve_WithValidEntityID_ShouldReturnAValidProduct()
         {
@@ -139,6 +140,20 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
 
                 // Product object
                 product = SampleEntityHelper.SampleProduct();
+
+                ProductCategory productCategory = new ProductCategory()
+                {
+                    ProductID = product.ID,
+                    Product = product,
+                    CategoryID = category.ID,
+                    Category = category
+                };
+
+                List<ProductCategory> productCategories = new List<ProductCategory>();
+                productCategories.Add(productCategory);
+
+                product.ProductCategories = productCategories;
+
                 context.Products.Add(product);
                 context.SaveChanges();
             }
@@ -194,13 +209,28 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 // Add Product Objects
                 for (var i = 1; i <= 10; i += 1)
                 {
-                    context.Products.Add(new Product
+                    Product product = new Product
                     {
                         Name = string.Format("Rubber Shoes {0}", i),
                         Description = string.Format("This is a pair of rubber shoes {0}.", i),
                         Price = 2000,
                         ImageUrl = string.Format("rubbershoes{0}.jpg", i)
-                    });
+                    };
+
+                    ProductCategory productCategory = new ProductCategory()
+                    {
+                        ProductID = product.ID,
+                        Product = product,
+                        CategoryID = category.ID,
+                        Category = category
+                    };
+
+                    List<ProductCategory> productCategories = new List<ProductCategory>();
+                    productCategories.Add(productCategory);
+
+                    product.ProductCategories = productCategories;
+
+                    context.Products.Add(product);
                 }
 
                 context.SaveChanges();
@@ -240,6 +270,19 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
 
                 Product product = SampleEntityHelper.SampleProduct();
                 context.Products.Add(product);
+
+                ProductCategory productCategory = new ProductCategory()
+                {
+                    ProductID = product.ID,
+                    Product = product,
+                    CategoryID = category.ID,
+                    Category = category
+                };
+
+                List<ProductCategory> productCategories = new List<ProductCategory>();
+                productCategories.Add(productCategory);
+
+                product.ProductCategories = productCategories;
                 context.SaveChanges();
 
                 expectedId = product.ID;
