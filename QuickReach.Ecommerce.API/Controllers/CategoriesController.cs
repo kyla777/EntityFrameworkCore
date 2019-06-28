@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web.Http;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,9 +17,12 @@ namespace QuickReach.Ecommerce.API.Controllers
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryRepository repository;
-        public CategoriesController(ICategoryRepository repository)
+        private readonly IProductRepository productRepo;
+        public CategoriesController(ICategoryRepository repository,
+            IProductRepository productRepo)
         {
             this.repository = repository;
+            this.productRepo = productRepo;
         }
 
         // Create GET
@@ -52,7 +56,7 @@ namespace QuickReach.Ecommerce.API.Controllers
 
             return CreatedAtAction(nameof(this.Get), new { id = newCategory.ID }, newCategory);
         }
-
+        
         // PUT
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Category category)
@@ -65,6 +69,115 @@ namespace QuickReach.Ecommerce.API.Controllers
             this.repository.Update(id, category);
 
             return Ok(category);
+        }
+
+        // Add product
+        [HttpPut("{categoryId}/products/")]
+        public IActionResult AddProductCateoryAndUpdateCategory(int categoryId, [FromBody] ProductCategory entity)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var category = this.repository.Retrieve(categoryId);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            var product = this.productRepo.Retrieve(entity.ProductID);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            category.AddProduct(entity.ProductID);
+
+            this.repository.Update(category.ID, category);
+
+            return Ok(category);
+        }
+
+        // Remove productcategory
+        [HttpPut("{categoryId}/products/{productId}")]
+        public IActionResult RemoveProductCategoryAndUpdateCategory(int categoryId, int productId)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var category = this.repository.Retrieve(categoryId);
+
+            if (category == null)
+            {
+                return NotFound();
+            }
+
+            var product = this.productRepo.Retrieve(productId);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            category.RemoveProduct(productId);
+
+            this.repository.Update(category.ID, category);
+
+            return Ok(category);
+        }
+
+        // Add Child categories
+        [HttpPut("{categoryId}/subcategories/")]
+        public IActionResult AddChildCategories(int categoryId, [FromBody] Category subCategory)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var parentCategory = this.repository.Retrieve(categoryId);
+
+            if (parentCategory == null)
+            {
+                return NotFound();
+            }
+
+            parentCategory.AddChild(subCategory.ID);
+
+            this.repository.Update(parentCategory.ID, parentCategory);
+
+            return Ok(parentCategory);
+        }
+
+        // Remove Child categories
+        [HttpPut("{categoryId}/subcategories/{subCategoryId}")]
+        public IActionResult RemoveChildCategories(int categoryId, int subCategoryId)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            var parentCategory = this.repository.Retrieve(categoryId);
+
+            if (parentCategory == null)
+            {
+                return NotFound();
+            }
+
+            var subCategory = this.repository.Retrieve(subCategoryId);
+
+            if (subCategory == null)
+            {
+                return NotFound();
+            }
+
+            parentCategory.RemoveChild(subCategory.ID);
+
+            this.repository.Update(parentCategory.ID, parentCategory);
+
+            return Ok(parentCategory);
         }
 
         // DELETE

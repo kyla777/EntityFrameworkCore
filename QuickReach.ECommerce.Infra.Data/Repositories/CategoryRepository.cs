@@ -11,27 +11,14 @@ namespace QuickReach.ECommerce.Infra.Data.Repositories
     {
         public CategoryRepository(ECommerceDbContext context) : base(context)
         {
-
-        }
-
-        public Category Create(Category newEntity, string parent)
-        {
-            var parentCategory = this.context.Categories
-                                                .Where(c => c.Name.Contains(parent))
-                                                .FirstOrDefault();
-
-            parentCategory.AddChild(newEntity.ID);
-
-            this.context.Set<Category>().Add(newEntity);
-            this.context.SaveChanges();
-            return newEntity;
         }
 
         public override Category Retrieve(int entityId)
         {
             var entity = this.context.Categories
-                                // .AsNoTracking()
                                 .Include(c => c.ProductCategories)
+                                .Include(c => c.ChildCategories)
+                                .Include(c => c.ParentCategories)
                                 .Where(c => c.ID == entityId)
                                 .FirstOrDefault();
             return entity;

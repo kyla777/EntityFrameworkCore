@@ -36,18 +36,18 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 // Product Object
                 product = SampleEntityHelper.SampleProduct();
 
-                ProductCategory productCategory = new ProductCategory()
-                {
-                    ProductID = product.ID,
-                    Product = product,
-                    CategoryID = category.ID,
-                    Category = category
-                };
+                //ProductCategory productCategory = new ProductCategory()
+                //{
+                //    ProductID = product.ID,
+                //    Product = product,
+                //    CategoryID = category.ID,
+                //    Category = category
+                //};
 
-                List<ProductCategory> productCategories = new List<ProductCategory>();
-                productCategories.Add(productCategory);
+                //List<ProductCategory> productCategories = new List<ProductCategory>();
+                //productCategories.Add(productCategory);
 
-                product.ProductCategories = productCategories;
+                //product.ProductCategories = productCategories;
 
                 var sut = new ProductRepository(context);
 
@@ -93,18 +93,18 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
 
                 context.Products.Add(product);
 
-                ProductCategory productCategory = new ProductCategory()
-                {
-                    ProductID = product.ID,
-                    Product = product,
-                    CategoryID = category.ID,
-                    Category = category
-                };
+                //ProductCategory productCategory = new ProductCategory()
+                //{
+                //    ProductID = product.ID,
+                //    Product = product,
+                //    CategoryID = category.ID,
+                //    Category = category
+                //};
 
-                List<ProductCategory> productCategories = new List<ProductCategory>();
-                productCategories.Add(productCategory);
+                //List<ProductCategory> productCategories = new List<ProductCategory>();
+                //productCategories.Add(productCategory);
 
-                product.ProductCategories = productCategories;
+                //product.ProductCategories = productCategories;
 
                 context.SaveChanges();
 
@@ -141,18 +141,18 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 // Product object
                 product = SampleEntityHelper.SampleProduct();
 
-                ProductCategory productCategory = new ProductCategory()
-                {
-                    ProductID = product.ID,
-                    Product = product,
-                    CategoryID = category.ID,
-                    Category = category
-                };
+                //ProductCategory productCategory = new ProductCategory()
+                //{
+                //    ProductID = product.ID,
+                //    Product = product,
+                //    CategoryID = category.ID,
+                //    Category = category
+                //};
 
-                List<ProductCategory> productCategories = new List<ProductCategory>();
-                productCategories.Add(productCategory);
+                //List<ProductCategory> productCategories = new List<ProductCategory>();
+                //productCategories.Add(productCategory);
 
-                product.ProductCategories = productCategories;
+                //product.ProductCategories = productCategories;
 
                 context.Products.Add(product);
                 context.SaveChanges();
@@ -217,18 +217,18 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                         ImageUrl = string.Format("rubbershoes{0}.jpg", i)
                     };
 
-                    ProductCategory productCategory = new ProductCategory()
-                    {
-                        ProductID = product.ID,
-                        Product = product,
-                        CategoryID = category.ID,
-                        Category = category
-                    };
+                    //ProductCategory productCategory = new ProductCategory()
+                    //{
+                    //    ProductID = product.ID,
+                    //    Product = product,
+                    //    CategoryID = category.ID,
+                    //    Category = category
+                    //};
 
-                    List<ProductCategory> productCategories = new List<ProductCategory>();
-                    productCategories.Add(productCategory);
+                    //List<ProductCategory> productCategories = new List<ProductCategory>();
+                    //productCategories.Add(productCategory);
 
-                    product.ProductCategories = productCategories;
+                    //product.ProductCategories = productCategories;
 
                     context.Products.Add(product);
                 }
@@ -271,18 +271,19 @@ namespace QuickReach.Ecommerce.Infra.Data.Tests
                 Product product = SampleEntityHelper.SampleProduct();
                 context.Products.Add(product);
 
-                ProductCategory productCategory = new ProductCategory()
-                {
-                    ProductID = product.ID,
-                    Product = product,
-                    CategoryID = category.ID,
-                    Category = category
-                };
+                //ProductCategory productCategory = new ProductCategory()
+                //{
+                //    ProductID = product.ID,
+                //    Product = product,
+                //    CategoryID = category.ID,
+                //    Category = category
+                //};
 
-                List<ProductCategory> productCategories = new List<ProductCategory>();
-                productCategories.Add(productCategory);
+                //List<ProductCategory> productCategories = new List<ProductCategory>();
+                //productCategories.Add(productCategory);
 
-                product.ProductCategories = productCategories;
+                //product.ProductCategories = productCategories;
+
                 context.SaveChanges();
 
                 expectedId = product.ID;
