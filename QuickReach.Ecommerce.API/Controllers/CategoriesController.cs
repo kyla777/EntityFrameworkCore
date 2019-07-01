@@ -9,6 +9,10 @@ using QuickReach.ECommerce.Domain;
 using QuickReach.ECommerce.Domain.Models;
 using QuickReach.ECommerce.Infra.Data;
 using QuickReach.ECommerce.Infra.Data.Repositories;
+using QuickReach.Ecommerce.API.ViewModel;
+using Microsoft.EntityFrameworkCore;
+using System.Data.SqlClient;
+using Dapper;
 
 namespace QuickReach.Ecommerce.API.Controllers
 {
@@ -18,11 +22,13 @@ namespace QuickReach.Ecommerce.API.Controllers
     {
         private readonly ICategoryRepository repository;
         private readonly IProductRepository productRepo;
+        private readonly ECommerceDbContext context;
         public CategoriesController(ICategoryRepository repository,
-            IProductRepository productRepo)
+            IProductRepository productRepo, ECommerceDbContext context)
         {
             this.repository = repository;
             this.productRepo = productRepo;
+            this.context = context;
         }
 
         // Create GET
@@ -69,6 +75,27 @@ namespace QuickReach.Ecommerce.API.Controllers
             this.repository.Update(id, category);
 
             return Ok(category);
+        }
+
+        [HttpGet("{id}/products")]
+        public IActionResult GetProdctByCategory(int id)
+        {
+            var connectionString = "Server=.;Database=QuickReachDb;Integrated Security=true;";
+            var connection = new SqlConnection(connectionString);
+            var parameter = new SqlParameter("@categoryId", id);
+            var sql = @"SELECT pc.ProductID, 
+                         pc.CategoryID, 
+                         p.Name,
+                         p.Description, 
+                         p.Price, 
+                         p.ImageUrl
+                 FROM Product p INNER JOIN ProductCategory pc 
+                 ON p.ID = pc.ProductID
+                 WHERE pc.CategoryID = @categoryId";
+            var result = connection.Query<SearchItemViewModel>(sql,
+                                new { categoryId = id }).ToList();
+                      
+            return Ok(result);
         }
 
         // Add product
