@@ -14,9 +14,12 @@ namespace QuickReach.Ecommerce.API.Controllers
     public class SuppliersController : ControllerBase
     {
         private readonly ISupplierRepository repository;
-        public SuppliersController(ISupplierRepository repository)
+        private readonly IProductRepository productRepo;
+        public SuppliersController(ISupplierRepository repository,
+                                   IProductRepository productRepo)
         {
             this.repository = repository;
+            this.productRepo = productRepo;
         }
 
         [HttpGet]
@@ -65,6 +68,65 @@ namespace QuickReach.Ecommerce.API.Controllers
             this.repository.Delete(id);
 
             return Ok();
+        }
+
+        [HttpPut("{supplierId}/products/")]
+        public IActionResult AddProductSupplierAndUpdateSupplier(int supplierId, [FromBody] ProductSupplier entity)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var supplier = this.repository.Retrieve(supplierId);
+
+            if(supplier == null)
+            {
+                return NotFound();
+            }
+
+            var product = this.productRepo.Retrieve(entity.ProductID);
+
+            if(product == null)
+            {
+                return NotFound();
+            }
+
+            supplier.AddProduct(entity.ProductID);
+
+            this.repository.Update(supplier.ID, supplier);
+
+            return Ok(supplier);
+        }
+
+        // Remove Product
+        [HttpPut("{supplierId}/products/{productId}")]
+        public IActionResult RemoveProductSupplierAndUpdateSupplier(int supplierId, int productId)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var supplier = this.repository.Retrieve(supplierId);
+
+            if (supplier == null)
+            {
+                return NotFound();
+            }
+
+            var product = this.productRepo.Retrieve(productId);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            supplier.RemoveProduct(productId);
+
+            this.repository.Update(supplier.ID, supplier);
+
+            return Ok(supplier);
         }
     }
 }

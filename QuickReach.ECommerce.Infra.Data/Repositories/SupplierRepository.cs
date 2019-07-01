@@ -13,6 +13,15 @@ namespace QuickReach.ECommerce.Infra.Data.Repositories
         {
         }
 
+        public override Supplier Retrieve(int entityId)
+        {
+            var entity = this.context.Suppliers
+                                .Include(s => s.ProductSuppliers)
+                                .Where(s => s.ID == entityId)
+                                .FirstOrDefault();
+            return entity;
+        }
+
         public IEnumerable<Supplier> Retrieve(string search = "", int skip = 0, int count = 10)
         {
             var results = this.context.Suppliers

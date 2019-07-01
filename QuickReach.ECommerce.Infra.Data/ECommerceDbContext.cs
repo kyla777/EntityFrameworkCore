@@ -11,7 +11,6 @@ namespace QuickReach.ECommerce.Infra.Data
         // For every aggregate root create a property here
         public ECommerceDbContext(DbContextOptions<ECommerceDbContext> options) : base(options)
         {
-
         }
 
         public ECommerceDbContext() : base()
@@ -25,6 +24,7 @@ namespace QuickReach.ECommerce.Infra.Data
             modelBuilder.ApplyConfiguration(new CategoryEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryRollUpEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new SupplierEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductSupplierEntityTypeConfiguration());
 
             foreach (var relationship in modelBuilder.Model.GetEntityTypes()
                         .Where(e => !e.IsOwned())
@@ -32,7 +32,6 @@ namespace QuickReach.ECommerce.Infra.Data
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
-
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

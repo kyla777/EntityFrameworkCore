@@ -26,5 +26,6 @@ namespace QuickReach.ECommerce.Domain.Models
         public string ImageUrl { get; set; }
 
         public IEnumerable<ProductCategory> ProductCategories { get; set; }
+        public IEnumerable<ProductSupplier> ProductSuppliers { get; set; }
     }
 }
