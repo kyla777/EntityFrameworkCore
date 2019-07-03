@@ -21,13 +21,21 @@ namespace QuickReach.ECommerce.Infra.Data
         {
             modelBuilder.ApplyConfiguration(new ProductEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new ProductCategoryEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductSupplierEntityTypeConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductManufacturerEntityTypeConfiguration());
+
             modelBuilder.ApplyConfiguration(new CategoryEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new CategoryRollUpEntityTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new SupplierEntityTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new ProductSupplierEntityTypeConfiguration());
 
             modelBuilder.ApplyConfiguration(new CartEntityTypeConfiguration());
             modelBuilder.ApplyConfiguration(new CartItemEntityTypeConfiguration());
+
+            modelBuilder.ApplyConfiguration(new SupplierEntityTypeConfiguration());
+
+            modelBuilder.ApplyConfiguration(new CustomerEntityTypeConfiguration());
+
+            modelBuilder.ApplyConfiguration(new ManufacturerEntityTypeConfiguration());
+
 
             foreach (var relationship in modelBuilder.Model.GetEntityTypes()
                         .Where(e => !e.IsOwned())
@@ -52,5 +60,7 @@ namespace QuickReach.ECommerce.Infra.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Supplier> Suppliers { get; set; }
         public DbSet<Cart> Carts { get; set; }
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Manufacturer> Manufacturers { get; set; }
     }
 }

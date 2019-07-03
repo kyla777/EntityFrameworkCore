@@ -9,6 +9,7 @@ namespace QuickReach.ECommerce.Domain.Models
     public class CartItem : IValidatableObject
     {
         public int Id { get; set; }
+        public Cart Cart { get; set; }
         public string ProductId { get; set; }
         public string ProductName { get; set; }
         public decimal UnitPrice { get; set; }

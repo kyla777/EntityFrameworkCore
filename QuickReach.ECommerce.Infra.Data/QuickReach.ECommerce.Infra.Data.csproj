@@ -5,6 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190703052837_Add Cart, CartItem and Customer.cs" />
+    <Compile Remove="Migrations\20190703052837_Add Cart, CartItem and Customer.Designer.cs" />
+    <Compile Remove="Migrations\20190703053127_Add Cart, CartItem and Customer.cs" />
+    <Compile Remove="Migrations\20190703053127_Add Cart, CartItem and Customer.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.2.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.4">

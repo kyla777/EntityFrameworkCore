@@ -15,7 +15,10 @@ namespace QuickReach.ECommerce.Infra.Data.EntityConfiguration
                    .IsRequired()
                    .ValueGeneratedOnAdd();
 
-            builder.HasMany(c => c.Items);
+            builder.HasMany(c => c.Items)
+                   .WithOne(c => c.Cart)
+                   .HasForeignKey("CartID")
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

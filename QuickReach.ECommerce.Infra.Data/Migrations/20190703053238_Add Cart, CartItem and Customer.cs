@@ -3,10 +3,31 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace QuickReach.ECommerce.Infra.Data.Migrations
 {
-    public partial class Addcartandcartitemmodels : Migration
+    public partial class AddCartCartItemandCustomer : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Customer",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CardNumber = table.Column<string>(nullable: false),
+                    SecurityNumber = table.Column<string>(nullable: false),
+                    Expiration = table.Column<string>(nullable: false),
+                    CardHolderName = table.Column<string>(nullable: false),
+                    CardType = table.Column<int>(nullable: false),
+                    Street = table.Column<string>(nullable: false),
+                    City = table.Column<string>(nullable: false),
+                    State = table.Column<string>(nullable: false),
+                    Country = table.Column<string>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customer", x => x.ID);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Cart",
                 columns: table => new
@@ -18,6 +39,12 @@ namespace QuickReach.ECommerce.Infra.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cart", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_Cart_Customer_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customer",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -26,13 +53,13 @@ namespace QuickReach.ECommerce.Infra.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    CartID = table.Column<int>(nullable: true),
                     ProductId = table.Column<string>(nullable: true),
                     ProductName = table.Column<string>(nullable: true),
                     UnitPrice = table.Column<decimal>(nullable: false),
                     OldUnitPrice = table.Column<decimal>(nullable: false),
                     Quantity = table.Column<int>(nullable: false),
-                    ImageUrl = table.Column<string>(nullable: true),
-                    CartID = table.Column<int>(nullable: true)
+                    ImageUrl = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -44,6 +71,11 @@ namespace QuickReach.ECommerce.Infra.Data.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cart_CustomerId",
+                table: "Cart",
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CartItem_CartID",
@@ -58,6 +90,9 @@ namespace QuickReach.ECommerce.Infra.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Cart");
+
+            migrationBuilder.DropTable(
+                name: "Customer");
         }
     }
 }
