@@ -78,7 +78,7 @@ namespace QuickReach.Ecommerce.API.Controllers
         }
 
         [HttpGet("{id}/products")]
-        public IActionResult GetProdctByCategory(int id)
+        public IActionResult GetProductByCategory(int id)
         {
             var connectionString = "Server=.;Database=QuickReachDb;Integrated Security=true;";
             var connection = new SqlConnection(connectionString);
