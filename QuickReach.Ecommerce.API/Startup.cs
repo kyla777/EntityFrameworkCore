@@ -34,6 +34,7 @@ namespace QuickReach.Ecommerce.API
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
             services.AddTransient<ISupplierRepository, SupplierRepository>();
+            services.AddTransient<IOrderRepository, OrderRepository>();
             services.AddTransient<ICartRepository, CartRepository>();
             services.AddTransient<ICustomerRepository, CustomerRepository>();
             services.AddTransient<IManufacturerRepository, ManufacturerRepository>();

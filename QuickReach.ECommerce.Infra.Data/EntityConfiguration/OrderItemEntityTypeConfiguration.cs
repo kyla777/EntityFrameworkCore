@@ -7,17 +7,17 @@ using System.Text;
 
 namespace QuickReach.ECommerce.Infra.Data.EntityConfiguration
 {
-    public class CustomerEntityTypeConfiguration : IEntityTypeConfiguration<Customer>
+    public class OrderItemEntityTypeConfiguration : IEntityTypeConfiguration<OrderItem>
     {
-        public void Configure(EntityTypeBuilder<Customer> builder)
+        public void Configure(EntityTypeBuilder<OrderItem> builder)
         {
-            builder.Property(c => c.ID)
+            builder.Property(oi => oi.Id)
                    .IsRequired()
                    .ValueGeneratedOnAdd();
 
-            builder.HasMany(c => c.Carts);
-
-            builder.HasMany(c => c.Orders);
+            builder.HasOne(oi => oi.Order)
+                   .WithMany(o => o.Items)
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

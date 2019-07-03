@@ -31,5 +31,6 @@ namespace QuickReach.ECommerce.Domain.Models
         public string ZipCode { get; set; }
 
         public IEnumerable<Cart> Carts { get; set; }
+        public IEnumerable<Order> Orders { get; set; }
     }
 }
