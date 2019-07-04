@@ -9,6 +9,7 @@ namespace QuickReach.ECommerce.Domain.Models
     [Table("Order")]
     public class Order : EntityBase
     {
+        public Customer Customer { get; set; }
         public int CustomerId { get; set; }
         public List<OrderItem> Items { get; set; }
         public Cart Cart { get; set; }

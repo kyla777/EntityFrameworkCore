@@ -17,7 +17,6 @@ namespace QuickReach.ECommerce.Infra.Data.EntityConfiguration
 
             builder.HasMany(o => o.Items)
                    .WithOne(o => o.Order)
-                   .HasForeignKey("OrderID")
                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(o => o.Cart);

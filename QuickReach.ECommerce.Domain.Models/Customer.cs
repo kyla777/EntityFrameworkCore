@@ -9,6 +9,12 @@ namespace QuickReach.ECommerce.Domain.Models
     [Table("Customer")]
     public class Customer : EntityBase
     {
+        public Customer()
+        {
+            this.Carts = new List<Cart>();
+            this.Orders = new List<Order>();
+        }
+
         [Required]
         public string CardNumber { get; set; }
         [Required]

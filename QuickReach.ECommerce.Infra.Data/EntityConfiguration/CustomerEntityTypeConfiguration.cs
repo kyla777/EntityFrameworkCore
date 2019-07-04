@@ -15,9 +15,11 @@ namespace QuickReach.ECommerce.Infra.Data.EntityConfiguration
                    .IsRequired()
                    .ValueGeneratedOnAdd();
 
-            builder.HasMany(c => c.Carts);
+            builder.HasMany(c => c.Carts)
+                   .WithOne(c => c.Customer);
 
-            builder.HasMany(c => c.Orders);
+            builder.HasMany(c => c.Orders)
+                   .WithOne(o => o.Customer);
         }
     }
 }

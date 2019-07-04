@@ -9,6 +9,8 @@
     <Compile Remove="Migrations\20190703052837_Add Cart, CartItem and Customer.Designer.cs" />
     <Compile Remove="Migrations\20190703053127_Add Cart, CartItem and Customer.cs" />
     <Compile Remove="Migrations\20190703053127_Add Cart, CartItem and Customer.Designer.cs" />
+    <Compile Remove="Migrations\20190704012622_Remove HasForeignKey from Order and Customer ETC.cs" />
+    <Compile Remove="Migrations\20190704012622_Remove HasForeignKey from Order and Customer ETC.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

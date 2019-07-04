@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using QuickReach.Ecommerce.API.ViewModel;
 using QuickReach.ECommerce.Domain;
 using QuickReach.ECommerce.Domain.Models;
 
@@ -92,6 +94,8 @@ namespace QuickReach.Ecommerce.API.Controllers
             return Ok(order);
         }
 
+        // TODO:
+        // Remove item from orderitem table
         [HttpPut("{orderId}/items/{orderItemId}")]
         public IActionResult RemoveOrderItem(int orderId, int orderItemId)
         {

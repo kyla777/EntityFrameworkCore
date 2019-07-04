@@ -10,6 +10,7 @@ namespace QuickReach.ECommerce.Domain.Models
     public class Cart : EntityBase
 
     {
+        public Customer Customer { get; set; }
         public int CustomerId { get; set; }
         public List<CartItem> Items { get; set; }
         public Cart(int customerId)
