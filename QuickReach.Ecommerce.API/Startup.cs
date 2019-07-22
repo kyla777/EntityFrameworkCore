@@ -39,6 +39,15 @@ namespace QuickReach.Ecommerce.API
             services.AddTransient<ICustomerRepository, CustomerRepository>();
             services.AddTransient<IManufacturerRepository, ManufacturerRepository>();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                     .AddJsonOptions(opts => opts.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
@@ -58,6 +67,7 @@ namespace QuickReach.Ecommerce.API
             }
 
             app.UseHttpsRedirection();
+            app.UseCors("CorsPolicy");
             app.UseMvc();
         }
     }
